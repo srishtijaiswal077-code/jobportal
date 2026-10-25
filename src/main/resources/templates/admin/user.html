@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Users</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div class="navbar">
+    <div class="brand">AI Job Portal</div>
+    <div class="nav-links">
+        <a th:href="@{/admin/home}">Dashboard</a>
+        <a th:href="@{/admin/users}">Users</a>
+        <a th:href="@{/admin/jobs}">Jobs</a>
+        <form th:action="@{/logout}" method="post"><button class="btn btn-light btn-sm">Logout</button></form>
+    </div>
+</div>
+<div class="container">
+    <div class="page-title"><h2>Manage Users</h2></div>
+    <div class="card">
+        <table>
+            <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th></th></tr>
+            <tr th:each="u : ${users}">
+                <td><b th:text="${u.name}"></b></td>
+                <td th:text="${u.email}"></td>
+                <td><span class="badge badge-APPLIED" th:text="${u.role}"></span></td>
+                <td>
+                    <span class="badge badge-HIRED" th:if="${u.active}">Active</span>
+                    <span class="badge badge-REJECTED" th:unless="${u.active}">Deactivated</span>
+                </td>
+                <td>
+                    <form th:if="${u.role.name() != 'ADMIN'}"
+                          th:action="@{/admin/users/{id}/toggle(id=${u.id})}" method="post">
+                        <button class="btn btn-outline btn-sm" type="submit"
+                                th:text="${u.active} ? 'Deactivate' : 'Activate'"></button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

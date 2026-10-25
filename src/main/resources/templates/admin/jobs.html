@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Jobs</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div class="navbar">
+    <div class="brand">AI Job Portal</div>
+    <div class="nav-links">
+        <a th:href="@{/admin/home}">Dashboard</a>
+        <a th:href="@{/admin/users}">Users</a>
+        <a th:href="@{/admin/jobs}">Jobs</a>
+        <form th:action="@{/logout}" method="post"><button class="btn btn-light btn-sm">Logout</button></form>
+    </div>
+</div>
+<div class="container">
+    <div class="page-title"><h2>Manage Jobs</h2></div>
+    <div class="card">
+        <div class="empty" th:if="${jobs.isEmpty()}">No jobs posted yet.</div>
+        <table th:unless="${jobs.isEmpty()}">
+            <tr><th>Job</th><th>Posted by</th><th>Skills</th><th>Applicants</th><th>Status</th><th></th></tr>
+            <tr th:each="j : ${jobs}">
+                <td><b th:text="${j.title}"></b></td>
+                <td th:text="${j.recruiter != null ? j.recruiter.name : '-'}"></td>
+                <td><span class="chip" th:each="s : ${#strings.arraySplit(j.requiredSkills, ',')}"
+                          th:text="${#strings.trim(s)}"></span></td>
+                <td th:text="${counts.get(j.id)}"></td>
+                <td>
+                    <span class="badge badge-HIRED" th:if="${j.open}">Open</span>
+                    <span class="badge badge-REJECTED" th:unless="${j.open}">Closed</span>
+                </td>
+                <td>
+                    <form th:action="@{/admin/jobs/{id}/toggle(id=${j.id})}" method="post">
+                        <button class="btn btn-outline btn-sm" type="submit"
+                                th:text="${j.open} ? 'Close' : 'Reopen'"></button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

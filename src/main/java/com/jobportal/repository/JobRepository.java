@@ -7,4 +7,5 @@ import java.util.List;
 public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findByRecruiter(User recruiter);
     List<Job> findByOpenTrueOrderByCreatedAtDesc();
+    long countByOpen(boolean open);
 }

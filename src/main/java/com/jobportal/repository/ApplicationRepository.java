@@ -8,4 +8,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     List<Application> findByCandidateOrderByAppliedAtDesc(User candidate);
     List<Application> findByJob(Job job);
     boolean existsByJobAndCandidate(Job job, User candidate);
+    long countByStatus(ApplicationStatus status);
+    long countByJob(Job job);
 }

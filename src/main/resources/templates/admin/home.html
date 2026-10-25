@@ -1,17 +1,59 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Dashboard</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+    <title>Admin Dashboard</title><link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script></head>
 <body>
 <div class="navbar">
     <div class="brand">AI Job Portal</div>
     <div class="nav-links">
+        <a th:href="@{/admin/home}">Dashboard</a>
+        <a th:href="@{/admin/users}">Users</a>
+        <a th:href="@{/admin/jobs}">Jobs</a>
         <form th:action="@{/logout}" method="post"><button class="btn btn-light btn-sm">Logout</button></form>
     </div>
 </div>
 <div class="container">
     <div class="page-title"><h2>Admin Dashboard</h2></div>
-    <div class="card"><div class="empty">Users, jobs aur statistics yahan aayenge (Phase 6).</div></div>
+
+    <div class="stats">
+        <div class="stat"><div class="n" th:text="${candidates}"></div><div class="l">Candidates</div></div>
+        <div class="stat"><div class="n" th:text="${recruiters}"></div><div class="l">Recruiters</div></div>
+        <div class="stat"><div class="n" th:text="${openJobs} + ' / ' + ${totalJobs}"></div><div class="l">Open / Total jobs</div></div>
+        <div class="stat"><div class="n" th:text="${totalApplications}"></div><div class="l">Applications</div></div>
+        <div class="stat"><div class="n" th:text="${totalResumes}"></div><div class="l">Resumes uploaded</div></div>
+        <div class="stat"><div class="n" th:text="${avgScore} + '%'"></div><div class="l">Avg match score</div></div>
+    </div>
+
+    <div class="charts">
+        <div class="card"><h3 style="margin-top:0">Applications by status</h3>
+            <div class="chart-box"><canvas id="statusChart"></canvas></div></div>
+        <div class="card"><h3 style="margin-top:0">Users by role</h3>
+            <div class="chart-box"><canvas id="roleChart"></canvas></div></div>
+    </div>
 </div>
+
+<script th:inline="javascript">
+    const statusLabels = /*[[${statusLabels}]]*/ [];
+    const statusCounts = /*[[${statusCounts}]]*/ [];
+    const roleLabels = /*[[${roleLabels}]]*/ [];
+    const roleCounts = /*[[${roleCounts}]]*/ [];
+
+    new Chart(document.getElementById('statusChart'), {
+        type: 'bar',
+        data: { labels: statusLabels,
+            datasets: [{ label: 'Applications', data: statusCounts,
+                backgroundColor: ['#3b82f6', '#f59e0b', '#ef4444', '#22c55e'] }] },
+        options: { maintainAspectRatio: false, plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+    });
+
+    new Chart(document.getElementById('roleChart'), {
+        type: 'doughnut',
+        data: { labels: roleLabels,
+            datasets: [{ data: roleCounts, backgroundColor: ['#4f46e5', '#f59e0b'] }] },
+        options: { maintainAspectRatio: false }
+    });
+</script>
 </body>
 </html>
