@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Analysis History</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div class="navbar">
+    <div class="brand">AI Job Portal</div>
+    <div class="nav-links">
+        <a th:href="@{/candidate/home}">Jobs</a>
+        <a th:href="@{/candidate/resume}">My Resume</a>
+        <a th:href="@{/candidate/applications}">My Applications</a>
+        <a th:href="@{/candidate/analyses}">Analysis History</a>
+        <form th:action="@{/logout}" method="post"><button class="btn btn-light btn-sm">Logout</button></form>
+    </div>
+</div>
+<div class="container">
+    <div class="page-title"><h2>Analysis History</h2></div>
+    <div class="card">
+        <div class="empty" th:if="${analyses.isEmpty()}">No analysis yet. Click "Check Match" on any job.</div>
+        <table th:unless="${analyses.isEmpty()}">
+            <tr><th>Job</th><th>Resume</th><th>Score</th><th>Date</th><th></th></tr>
+            <tr th:each="a : ${analyses}">
+                <td><b th:text="${a.job.title}"></b></td>
+                <td th:text="${a.resume.fileName}"></td>
+                <td><span class="badge"
+                          th:classappend="${a.score >= 70} ? 'badge-HIRED' : (${a.score >= 40} ? 'badge-SHORTLISTED' : 'badge-REJECTED')"
+                          th:text="${a.score} + '%'"></span></td>
+                <td th:text="${#temporals.format(a.createdAt, 'dd MMM yyyy, HH:mm')}"></td>
+                <td><a class="btn btn-outline btn-sm" th:href="@{/candidate/jobs/{id}/analysis(id=${a.job.id})}">Re-check</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

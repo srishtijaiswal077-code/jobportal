@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Applications</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div class="navbar">
+    <div class="brand">AI Job Portal</div>
+    <div class="nav-links">
+        <a th:href="@{/candidate/home}">Jobs</a>
+        <a th:href="@{/candidate/resume}">My Resume</a>
+        <a th:href="@{/candidate/applications}">My Applications</a>
+        <form th:action="@{/logout}" method="post"><button class="btn btn-light btn-sm">Logout</button></form>
+    </div>
+</div>
+<div class="container">
+    <div class="page-title"><h2>My Applications</h2></div>
+    <div class="card">
+        <div class="empty" th:if="${applications.isEmpty()}">You haven't applied to any job yet.</div>
+        <table th:unless="${applications.isEmpty()}">
+            <tr><th>Job</th><th>Applied on</th><th>Status</th></tr>
+            <tr th:each="a : ${applications}">
+                <td><b th:text="${a.job.title}"></b></td>
+                <td th:text="${#temporals.format(a.appliedAt, 'dd MMM yyyy')}"></td>
+                <td><span class="badge" th:classappend="'badge-' + ${a.status}" th:text="${a.status}"></span></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

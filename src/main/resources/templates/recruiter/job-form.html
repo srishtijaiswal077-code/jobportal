@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Post Job</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div class="navbar">
+    <div class="brand">AI Job Portal</div>
+    <div class="nav-links">
+        <a th:href="@{/recruiter/home}">My Jobs</a>
+        <a th:href="@{/recruiter/jobs/new}">Post Job</a>
+        <form th:action="@{/logout}" method="post"><button class="btn btn-light btn-sm">Logout</button></form>
+    </div>
+</div>
+<div class="container" style="max-width:650px">
+    <div class="page-title"><h2>Post a Job</h2></div>
+    <div class="card">
+        <form th:action="@{/recruiter/jobs}" th:object="${job}" method="post">
+            <div class="form-group"><label>Job title</label><input type="text" th:field="*{title}">
+                <span class="error" th:errors="*{title}"></span></div>
+            <div class="form-group"><label>Description</label><textarea th:field="*{description}" rows="5"></textarea>
+                <span class="error" th:errors="*{description}"></span></div>
+            <div class="form-group"><label>Required skills (comma separated)</label>
+                <input type="text" th:field="*{requiredSkills}" placeholder="Java, Spring Boot, SQL">
+                <span class="error" th:errors="*{requiredSkills}"></span></div>
+            <div class="form-group"><label>Minimum experience (years)</label>
+                <input type="number" th:field="*{minExperience}">
+                <span class="error" th:errors="*{minExperience}"></span></div>
+            <div class="form-group"><label>Location</label><input type="text" th:field="*{location}"></div>
+            <button class="btn" type="submit">Post Job</button>
+            <a class="btn btn-outline" th:href="@{/recruiter/home}">Cancel</a>
+        </form>
+    </div>
+</div>
+</body>
+</html>

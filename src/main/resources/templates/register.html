@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div class="auth-wrap"><div class="auth-card">
+    <h2>Create account</h2>
+    <div class="sub">Join AI Job Portal</div>
+    <form th:action="@{/register}" th:object="${user}" method="post">
+        <div class="form-group"><label>Full name</label><input type="text" th:field="*{name}">
+            <span class="error" th:errors="*{name}"></span></div>
+        <div class="form-group"><label>Email</label><input type="text" th:field="*{email}">
+            <span class="error" th:errors="*{email}"></span></div>
+        <div class="form-group"><label>Password (min 6)</label><input type="password" th:field="*{password}">
+            <span class="error" th:errors="*{password}"></span></div>
+        <div class="form-group"><label>I am a</label>
+            <select th:field="*{role}">
+                <option value="CANDIDATE">Candidate</option>
+                <option value="RECRUITER">Recruiter</option>
+            </select>
+            <span class="error" th:errors="*{role}"></span></div>
+        <button class="btn" type="submit">Register</button>
+    </form>
+    <div class="switch">Already have an account? <a th:href="@{/login}">Login</a></div>
+</div></div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Match Analysis</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div class="navbar">
+    <div class="brand">AI Job Portal</div>
+    <div class="nav-links">
+        <a th:href="@{/candidate/home}">Jobs</a>
+        <a th:href="@{/candidate/resume}">My Resume</a>
+        <a th:href="@{/candidate/applications}">My Applications</a>
+        <a th:href="@{/candidate/analyses}">Analysis History</a>
+        <form th:action="@{/logout}" method="post"><button class="btn btn-light btn-sm">Logout</button></form>
+    </div>
+</div>
+<div class="container">
+    <div class="page-title">
+        <h2>Match Analysis: <span th:text="${analysis.job.title}"></span></h2>
+        <a class="btn btn-outline" th:href="@{/candidate/home}">Back to jobs</a>
+    </div>
+
+    <div class="card">
+        <div class="score-wrap">
+            <div class="score-circle"
+                 th:classappend="${analysis.score >= 70} ? 'score-high' : (${analysis.score >= 40} ? 'score-mid' : 'score-low')">
+                <span class="num" th:text="${analysis.score} + '%'"></span>
+                <span class="lbl">Match</span>
+            </div>
+            <div style="flex:1; min-width:260px">
+                <div class="bar-row">
+                    <div class="bar-label"><span>Skills match</span><span th:text="${analysis.skillScore} + ' / 60'"></span></div>
+                    <div class="bar"><div th:style="'width:' + ${analysis.skillScore * 100 / 60} + '%'"></div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label"><span>Experience match</span><span th:text="${analysis.experienceScore} + ' / 20'"></span></div>
+                    <div class="bar"><div th:style="'width:' + ${analysis.experienceScore * 100 / 20} + '%'"></div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label"><span>Text similarity</span><span th:text="${analysis.similarityScore} + ' / 20'"></span></div>
+                    <div class="bar"><div th:style="'width:' + ${analysis.similarityScore * 100 / 20} + '%'"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top:0">Skills you have for this job</h3>
+        <div th:if="${analysis.matchedSkills != null and !analysis.matchedSkills.isEmpty()}">
+            <span class="chip chip-green" th:each="s : ${#strings.arraySplit(analysis.matchedSkills, ',')}" th:text="${s}"></span>
+        </div>
+        <div class="empty" th:if="${analysis.matchedSkills == null or analysis.matchedSkills.isEmpty()}">
+            None of the required skills were found in your resume.
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top:0">Missing skills</h3>
+        <div th:if="${analysis.missingSkills != null and !analysis.missingSkills.isEmpty()}">
+            <span class="chip chip-red" th:each="s : ${#strings.arraySplit(analysis.missingSkills, ',')}" th:text="${s}"></span>
+        </div>
+        <div class="empty" th:if="${analysis.missingSkills == null or analysis.missingSkills.isEmpty()}">
+            No missing skills. You cover everything this job asks for.
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-top:0">How to improve your resume</h3>
+        <ul class="suggestions" th:if="${analysis.suggestions != null and !analysis.suggestions.isEmpty()}">
+            <li th:each="t : ${#strings.arraySplit(analysis.suggestions, '|')}" th:text="${t}"></li>
+        </ul>
+        <div class="empty" th:if="${analysis.suggestions == null or analysis.suggestions.isEmpty()}">
+            No suggestions. Your resume is a great fit.
+        </div>
+    </div>
+</div>
+</body>
+</html>

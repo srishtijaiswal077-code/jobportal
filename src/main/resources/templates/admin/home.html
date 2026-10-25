@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin Dashboard</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div class="navbar">
+    <div class="brand">AI Job Portal</div>
+    <div class="nav-links">
+        <form th:action="@{/logout}" method="post"><button class="btn btn-light btn-sm">Logout</button></form>
+    </div>
+</div>
+<div class="container">
+    <div class="page-title"><h2>Admin Dashboard</h2></div>
+    <div class="card"><div class="empty">Users, jobs aur statistics yahan aayenge (Phase 6).</div></div>
+</div>
+</body>
+</html>

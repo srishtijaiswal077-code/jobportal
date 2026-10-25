@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recruiter Dashboard</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div class="navbar">
+    <div class="brand">AI Job Portal</div>
+    <div class="nav-links">
+        <a th:href="@{/recruiter/home}">My Jobs</a>
+        <a th:href="@{/recruiter/jobs/new}">Post Job</a>
+        <form th:action="@{/logout}" method="post"><button class="btn btn-light btn-sm">Logout</button></form>
+    </div>
+</div>
+<div class="container">
+    <div class="page-title">
+        <h2>My Jobs</h2>
+        <a class="btn" th:href="@{/recruiter/jobs/new}">+ Post New Job</a>
+    </div>
+    <div class="card">
+        <div class="empty" th:if="${jobs.isEmpty()}">No jobs posted yet.</div>
+        <table th:unless="${jobs.isEmpty()}">
+            <tr><th>Job</th><th>Skills</th><th>Experience</th><th>Location</th><th></th></tr>
+            <tr th:each="j : ${jobs}">
+                <td><b th:text="${j.title}"></b></td>
+                <td><span class="chip" th:each="s : ${#strings.arraySplit(j.requiredSkills, ',')}"
+                          th:text="${#strings.trim(s)}"></span></td>
+                <td th:text="${j.minExperience} + '+ yrs'"></td>
+                <td th:text="${j.location}"></td>
+                <td><a class="btn btn-outline btn-sm"
+                       th:href="@{/recruiter/jobs/{id}/applications(id=${j.id})}">View Applicants</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

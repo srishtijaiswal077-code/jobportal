@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Applications</title><link rel="stylesheet" th:href="@{/css/style.css}"></head>
+<body>
+<div class="navbar">
+    <div class="brand">AI Job Portal</div>
+    <div class="nav-links">
+        <a th:href="@{/recruiter/home}">My Jobs</a>
+        <a th:href="@{/recruiter/jobs/new}">Post Job</a>
+        <form th:action="@{/logout}" method="post"><button class="btn btn-light btn-sm">Logout</button></form>
+    </div>
+</div>
+<div class="container">
+    <div class="page-title">
+        <h2>Applicants: <span th:text="${job.title}"></span></h2>
+        <a class="btn btn-outline" th:href="@{/recruiter/home}">Back</a>
+    </div>
+    <div class="card">
+        <div class="empty" th:if="${applications.isEmpty()}">No applications yet.</div>
+        <table th:unless="${applications.isEmpty()}">
+            <tr><th>Candidate</th><th>Email</th><th>Applied</th><th>Status</th><th>Update</th></tr>
+            <tr th:each="a : ${applications}">
+                <td><b th:text="${a.candidate.name}"></b></td>
+                <td th:text="${a.candidate.email}"></td>
+                <td th:text="${#temporals.format(a.appliedAt, 'dd MMM yyyy')}"></td>
+                <td><span class="badge" th:classappend="'badge-' + ${a.status}" th:text="${a.status}"></span></td>
+                <td>
+                    <form th:action="@{/recruiter/applications/{id}/status(id=${a.id})}" method="post"
+                          style="display:flex; gap:6px">
+                        <select name="status" style="width:auto">
+                            <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"
+                                    th:selected="${s == a.status}"></option>
+                        </select>
+                        <button class="btn btn-sm" type="submit">Save</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
