@@ -8,11 +8,11 @@ A full-stack job portal built with **Java and Spring Boot** where candidates upl
 
 | Candidate: match analysis | Recruiter: ranked applicants |
 |---|---|
-| ![Match analysis](docs/screenshots/analysis.png) | ![Applicants](docs/screenshots/applicants.png) |
+| ![Match analysis](docs/screenshots/analysis.png) | ![applicant](docs/screenshots/applicant.png) |
 
 | Candidate: recommended jobs | Admin: dashboard |
 |---|---|
-| ![Jobs](docs/screenshots/jobs.png) | ![Admin](docs/screenshots/admin.png) |
+| ![jobs](docs/screenshots/candidate.png) | ![admin](docs/screenshots/admin.png) |
 
 ## Features
 
