@@ -88,8 +88,8 @@ Tables are created automatically by Hibernate:
 
 1. Clone the repository
    ```bash
-   git clone https://github.com/srishtijaiswal077-cod/AI-job-portal.git
-   cd AI-job-portal
+   git clone https://github.com/srishtijaiswal077-code/jobportal.git
+   cd jobportal
    ```
 2. Create a PostgreSQL database
    ```sql
