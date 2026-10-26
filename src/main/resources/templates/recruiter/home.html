@@ -13,7 +13,7 @@
 </div>
 <div class="container">
     <div class="page-title">
-        <h2>My Jobs</h2>
+        <h2 th:text="${hasResume} ? 'Recommended for you' : 'Open Jobs'"></h2>
         <a class="btn" th:href="@{/recruiter/jobs/new}">+ Post New Job</a>
     </div>
     <div class="card">

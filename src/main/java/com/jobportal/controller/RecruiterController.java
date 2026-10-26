@@ -1,5 +1,6 @@
 package com.jobportal.controller;
 
+import com.jobportal.analyzer.AnalyzerService;
 import com.jobportal.entity.*;
 import com.jobportal.repository.*;
 import jakarta.validation.Valid;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
+import java.util.*;
 
 @Controller
 @RequestMapping("/recruiter")
@@ -17,6 +19,8 @@ public class RecruiterController {
     private final UserRepository userRepository;
     private final JobRepository jobRepository;
     private final ApplicationRepository applicationRepository;
+    private final ResumeRepository resumeRepository;
+    private final AnalyzerService analyzerService;
 
     private User current(Principal p) {
         return userRepository.findByEmail(p.getName()).orElseThrow();
@@ -44,12 +48,42 @@ public class RecruiterController {
     }
 
     @GetMapping("/jobs/{id}/applications")
-    public String applications(@PathVariable Long id, Principal p, Model model) {
+    public String applications(@PathVariable Long id,
+                               @RequestParam(required = false) String skill,
+                               Principal p, Model model) {
         Job job = jobRepository.findById(id).orElseThrow();
         if (!job.getRecruiter().getId().equals(current(p).getId()))
             return "redirect:/recruiter/home";
+
+        List<Application> all = applicationRepository.findByJob(job);
+        Map<Long, String> skillsByApp = new HashMap<>();
+
+        for (Application a : all) {
+            Optional<Resume> r = resumeRepository.findFirstByUserOrderByUploadedAtDesc(a.getCandidate());
+            skillsByApp.put(a.getId(), r.map(Resume::getSkills).orElse(""));
+            // older applications have no score yet, so calculate it now
+            if (a.getMatchScore() == null && r.isPresent()) {
+                a.setMatchScore((double) analyzerService.quickScore(r.get(), job));
+                applicationRepository.save(a);
+            }
+        }
+
+        List<Application> list = new ArrayList<>(all);
+        if (skill != null && !skill.isBlank()) {
+            String wanted = skill.trim().toLowerCase();
+            list.removeIf(a -> {
+                String s = skillsByApp.getOrDefault(a.getId(), "").toLowerCase();
+                return Arrays.stream(s.split(",")).noneMatch(x -> x.trim().contains(wanted));
+            });
+        }
+        list.sort((a, b) -> Double.compare(
+                b.getMatchScore() == null ? -1 : b.getMatchScore(),
+                a.getMatchScore() == null ? -1 : a.getMatchScore()));
+
         model.addAttribute("job", job);
-        model.addAttribute("applications", applicationRepository.findByJob(job));
+        model.addAttribute("applications", list);
+        model.addAttribute("skillsByApp", skillsByApp);
+        model.addAttribute("skill", skill == null ? "" : skill);
         model.addAttribute("statuses", ApplicationStatus.values());
         return "recruiter/applications";
     }

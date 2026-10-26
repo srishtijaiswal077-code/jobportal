@@ -16,13 +16,38 @@
         <h2>Applicants: <span th:text="${job.title}"></span></h2>
         <a class="btn btn-outline" th:href="@{/recruiter/home}">Back</a>
     </div>
+
     <div class="card">
-        <div class="empty" th:if="${applications.isEmpty()}">No applications yet.</div>
+        <form th:action="@{/recruiter/jobs/{id}/applications(id=${job.id})}" method="get"
+              style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+            <label style="margin:0">Filter by skill:</label>
+            <input type="text" name="skill" th:value="${skill}" placeholder="e.g. Java, React, SQL"
+                   style="width:240px">
+            <button class="btn btn-sm" type="submit">Filter</button>
+            <a class="btn btn-outline btn-sm" th:if="${!skill.isEmpty()}"
+               th:href="@{/recruiter/jobs/{id}/applications(id=${job.id})}">Clear</a>
+        </form>
+    </div>
+
+    <div class="card">
+        <div class="empty" th:if="${applications.isEmpty()}">No applicants found.</div>
         <table th:unless="${applications.isEmpty()}">
-            <tr><th>Candidate</th><th>Email</th><th>Applied</th><th>Status</th><th>Update</th></tr>
+            <tr><th>Candidate</th><th>Skills</th><th>Match</th><th>Applied</th><th>Status</th><th>Update</th></tr>
             <tr th:each="a : ${applications}">
-                <td><b th:text="${a.candidate.name}"></b></td>
-                <td th:text="${a.candidate.email}"></td>
+                <td><b th:text="${a.candidate.name}"></b><br>
+                    <span style="color:#6b7280; font-size:12px" th:text="${a.candidate.email}"></span></td>
+                <td th:with="sk=${skillsByApp.get(a.id)}">
+                    <th:block th:if="${sk != null and !sk.isEmpty()}">
+                        <span class="chip" th:each="s : ${#strings.arraySplit(sk, ',')}" th:text="${s}"></span>
+                    </th:block>
+                </td>
+                <td>
+                    <span class="badge"
+                          th:if="${a.matchScore != null}"
+                          th:classappend="${a.matchScore >= 70} ? 'badge-HIRED' : (${a.matchScore >= 40} ? 'badge-SHORTLISTED' : 'badge-REJECTED')"
+                          th:text="${a.matchScore.intValue()} + '%'"></span>
+                    <span th:if="${a.matchScore == null}">-</span>
+                </td>
                 <td th:text="${#temporals.format(a.appliedAt, 'dd MMM yyyy')}"></td>
                 <td><span class="badge" th:classappend="'badge-' + ${a.status}" th:text="${a.status}"></span></td>
                 <td>
