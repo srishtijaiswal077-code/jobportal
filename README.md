@@ -6,13 +6,41 @@ A full-stack job portal built with **Java and Spring Boot** where candidates upl
 
 ## Screenshots
 
-| Candidate: match analysis | Recruiter: ranked applicants |
-|---|---|
-| ![Match analysis](docs/screenshots/analysis.png) | ![applicant](docs/screenshots/applicant.png) |
+### Candidate
 
-| Candidate: recommended jobs | Admin: dashboard |
-|---|---|
-| ![jobs](docs/screenshots/candidate.png) | ![admin](docs/screenshots/admin.png) |
+**AI Match Analysis**: skills match, experience match aur text similarity ke basis pe resume score
+![Match Analysis](docs/screenshots/01-match-analysis.png)
+
+**Resume Upload & Skill Extraction**
+![My Resume](docs/screenshots/02-my-resume.png)
+
+**Open Jobs** (Check Match / Apply)
+![Open Jobs](docs/screenshots/03-open-jobs-candidate.png)
+
+**Analysis History**
+![Analysis History](docs/screenshots/04-analysis-history.png)
+
+**My Applications**
+![My Applications](docs/screenshots/05-my-applications.png)
+
+### Recruiter
+
+**Job Listings**
+![Recruiter Jobs](docs/screenshots/06-recruiter-jobs.png)
+
+**Applicants with AI Match Score** (skill filter + status update)
+![Applicants](docs/screenshots/10-recruiter-applicants.png)
+
+### Admin
+
+**Dashboard**
+![Admin Dashboard](docs/screenshots/07-admin-dashboard.png)
+
+**Manage Users**
+![Manage Users](docs/screenshots/08-admin-users.png)
+
+**Manage Jobs**
+![Manage Jobs](docs/screenshots/09-admin-jobs.png)
 
 ## Features
 
